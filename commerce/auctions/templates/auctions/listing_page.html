@@ -1,0 +1,70 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <form action="{% url 'listing_page' listing_id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for listing in listings %}
+        <h2>Listing: {{ listing.title }}</h2>
+        {% if listing.image_url %}
+            <p><img src="{{ listing.image_url }}" style="width:400px; height:400px;"></p>
+        {% endif %}
+        <ul>
+            <li>{{ listing.description }}</li>
+            <li>Current Price:  ${{ price }}</li>
+            {% if user.is_authenticated and listing.is_active == True %}
+            <li>{{ form }}{% csrf_token %}<input class="btn btn-primary" type="submit" name="place_bid" value="Place Bid"></li>
+            {% endif %}
+        </ul>
+        <br>
+        <h5>Details:</h5>
+        <ul>
+            <li>Category:  {{ l_cat }}</li>
+            <li>Listed by:  {{ lister }}</li>
+            <li>Date Listed:  {{ listing.create_date }}</li>
+            {% if listing.is_active == False %}
+                <li><strong>Auction is Closed. Winner is {{ listing.winner }}.</strong></li>
+            {% endif %}
+        </ul>
+        {% if listing.is_active == False and listing.winner == user.username %}
+            <h3 style="color:tomato">Congratulations, {{ listing.winner }}! You won the Auction!</h3>
+        {% endif %}
+        <table>
+            <tr>
+                <th>Comments: </th>
+                {% for comment in comments %}
+                <tr>
+                    <td>
+                    {{ comment.text }}
+                    <p><small>{{ comment.commenter }}<br>{{ comment.created_on }}</small></p>
+                    </td>
+                </tr>
+                {% empty %}
+                <td>No Comments.</td>
+                {% endfor %}
+            </tr>
+        </table>
+        <input type="hidden" name="listing_id" value={{ listing.id }}>
+
+        {% if user.is_authenticated and listing.is_active == True %}
+            <input type="hidden" name="user" value={{ user.id }}>
+            <br>
+            {% if creator == user.id %}
+                <input class="btn btn-primary" type="submit" name="end_auction" value="Close Auction">
+            {% endif %}
+
+            <input class="btn btn-primary" type="submit" name="add_comments" value="Add Comments">
+            <input class="btn btn-primary" type="submit" name="save_watchlist" value="Save to Watchlist">
+            <input class="btn btn-primary" type="submit" name="remove_watchlist" value="Remove from Watchlist">
+        {% endif %}
+        {% if user.is_authenticated and listing.is_active == False %}
+            <input class="btn btn-primary" type="submit" name="remove_watchlist" value="Remove from Watchlist">
+        {% endif %}
+
+    {% empty %}
+        <td>Requested Listing is not Found.</td>
+    {% endfor %}
+    </form>
+
+{% endblock %}

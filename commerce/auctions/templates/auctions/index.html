@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% csrf_token %}
+
+    <ul>
+        {% for listing in listings %}
+            <table>
+                <tr>
+                    <a href="{% url 'listing_page' listing.id %}">{{listing.title }}</a>
+                    {% if listing.image_url %}
+                        <td><img src="{{ listing.image_url }}" style="width:100px; height:100px;"></td>
+                    {% endif %}
+                    <td>{{ listing.description }}<br>{% if listing.highest_bid %}
+                        Current Price: ${{ listing.highest_bid }}
+                        {% else %}
+                        Current Price: ${{ listing.start_bid }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr></tr>
+            </table>
+        {% empty %}
+            <li>No Active Listings</li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}

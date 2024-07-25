@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if user.is_authenticated %}
+    <h2>Watchlist for {{ user.username }}</h2>
+    {% csrf_token %}
+
+    <ul>
+    {% for watch in watch_list %}
+        <li><a href="{% url 'listing_page' watch.item.id %}">{{ watch.item.title }}</a></li>
+    {% empty %}
+        <li>No Listings in Watchlist.</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

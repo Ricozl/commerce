@@ -1,0 +1,19 @@
+body {
+    padding: 10px;
+}
+
+p {
+    padding: 10px;
+}
+
+table {
+    outline-style: 15px solid black;
+}
+th,td {
+    padding: 10px;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}

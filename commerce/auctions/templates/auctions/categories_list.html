@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+    {% csrf_token %}
+    <ul>
+        {% for category in categories %}
+        <li><a href="{% url 'cat_listings' category.cat_name %}">{{ category.cat_name }}</a></li>
+        {% empty %}
+        <li>No Categories</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

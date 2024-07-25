@@ -1,0 +1,14 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings for Category: {{ title }}</h2>
+    {% csrf_token %}
+
+    <ul>
+    {% for listing in listings %}
+        <li><a href="{% url 'listing_page' listing.id %}">{{ listing.title }}</a></li>
+    {% empty %}
+        <li>No Active Listings</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+    <form action="{% url 'comments_page' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Add Comments for {{ listings.title }}</h2>
+        <label for="text">Name: </label><br>
+        <input type="text" name="commenter" value={{ user.username }} readonly><br>
+        <br>
+        <label for="text">Comments: </label><br>
+        <input type="text" id="text" name="text"><br>
+
+        <input type="hidden" name="item" value={{ listing_id }}>
+
+        <input type="hidden" name="name" value={{ user.id }}>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Add Comments">
+    </form>
+
+{% endblock %}
